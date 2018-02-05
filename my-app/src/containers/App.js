@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Header from './Header';
 import {Footer} from '../components/Footer';
 import Main from './Main';
-import $ from "jquery";
 import '../css/App.css';
 import 'flexboxgrid';
 
@@ -11,28 +10,35 @@ class App extends Component {
         super(props);
         this.handler = this.handler.bind(this);
         this.state = {
-            activeToggle: false
+            activeToggle: false,
+            classes: "sideBar"
         }
     }
 
     handler() {
         if (this.state.activeToggle === false) {
-            this.setState(()=>{return {activeToggle: true}});
-            $('.sideBar').removeClass('hideBar');
-            $('.sideBar').addClass('showBar');
+            this.setState(() => {
+                return {
+                    activeToggle: true,
+                    classes: "sideBar showBar"
+                }
+            });
         }
         else {
-            this.setState(()=>{return {activeToggle: false}});
-            $('.sideBar').removeClass('showBar');
-            $('.sideBar').addClass('hideBar')
+            this.setState(() => {
+                return {
+                    activeToggle: false,
+                    classes: "hideBar showBar"
+                }
+            });
         }
     }
 
     render() {
         return (
             <div>
-                <div className="sideBar"/>
-                <Header action={this.handler}/>
+                <div className={this.state.classes}/>
+                <Header action={this.handler.bind(this)}/>
                 <Main/>
                 <Footer/>
             </div>
