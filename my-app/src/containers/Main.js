@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import timerKit from '../js/timers';
 import '../css/App.css';
 import 'flexboxgrid';
+
 
 class Main extends Component {
     constructor(props) {
@@ -8,8 +10,8 @@ class Main extends Component {
         this.timer = this.timer.bind(this);
         this.state = {
             activeToggle: false,
-            number: new Date().getMilliseconds() * this.getRandomArbitrary(1,9),
-            timer: null
+            number: new Date().getMilliseconds() * this.getRandomArbitrary(1, 9),
+            timeouts: [timerKit]
         }
     }
 
@@ -18,29 +20,40 @@ class Main extends Component {
     }
 
     timer() {
-        let interval = setInterval(() => {
+        this.state.timeouts[0].setTimeout(()=>{
             this.setState(() => {
                 return {
-                    number: new Date().getMilliseconds() * this.getRandomArbitrary(1,9),
-                    timer: interval
+                    number: new Date().getMilliseconds() * this.getRandomArbitrary(1, 9)
                 }
             });
         }, 2500);
     }
 
     stopTimer() {
-        clearInterval(this.state.timer);
+         this.state.timeouts[0].clearTimeouts();
     }
 
     forceRand() {
-        this.setState(() => {
-            return {number: new Date().getMilliseconds() * this.getRandomArbitrary(1,9)}
-        });
+        this.state.timeouts[0].setTimeout(()=> {
+            this.setState(() => {
+                return {
+                    number: new Date().getMilliseconds() * this.getRandomArbitrary(1, 9)
+                }
+            });
+        }, 1000);
+
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        nextState.timeouts[0].clearTimeouts();
+        this.timer();
+        return true;
     }
 
     componentDidMount() {
         this.timer();
     }
+
 
     render() {
         return (
